@@ -1,6 +1,6 @@
 const Appointment = require('../models/Appointment');
 
-const Hospital = require('../models/Hospital');
+const Groundcamp = require('../models/Hospital');
 
 //@desc     Get all appointments
 //@route    GET /api/v1/appointments
@@ -10,19 +10,19 @@ exports.getAppointments=async (req,res,next)=>{
     //General users can see only their appointments!
     if(req.user.role !== 'admin'){
         query=Appointment.find({user:req.user.id}).populate({
-            path:'hospital',
-            select: 'name province tel'
+            path:'camping',
+            select: 'name province contact'
         });
     }else{//If you are an admin, you can see all!
-        if(req.params.hospitalId){
-            query=Appointment.find({hospital:req.params.hospitalId}).populate({
-                path:'hospital',
-                select: 'name province tel'
+        if(req.params.campingId){
+            query=Appointment.find({camping:req.params.campingId}).populate({
+                path:'camping',
+                select: 'name province contact'
             });
         } else{
         query=Appointment.find().populate({
-            path:'hospital',
-            select: 'name province tel'
+            path:'camping',
+            select: 'name province contact'
         });
     }
     }
@@ -46,8 +46,8 @@ exports.getAppointments=async (req,res,next)=>{
 exports.getAppointment=async (req,res,next)=>{
     try {
         const appointment = await Appointment.findById(req.params.id).populate({
-            path: 'hospital',
-            select: 'name description tel'
+            path: 'camping',
+            select: 'name description contact'
         });
 
         if(!appointment){
@@ -65,22 +65,29 @@ exports.getAppointment=async (req,res,next)=>{
 };
 
 //@desc     Add appointment
-//@route    POST /api/v1/hospitals/:hospitalId/appointment
+//@route    POST /api/v1/groundcamps/:campingId/appointment
 //@access   Private
 exports.addAppointment=async (req,res,next)=>{
     try {
-        req.body.hospital = req.params.hospitalId;
+        console.log(req.params.campingId)
+        req.body.camping = req.params.campingId;
 
-        const hospital = await Hospital.findById(req.params.hospitalId);
+        const groundcamp = await Groundcamp.findById(req.params.campingId);
 
-        if(!hospital){
-            return res.status(404).json({success:false,message:`No hospital with the id of ${req.params.hospitalId}`});
+        if(!groundcamp){
+            return res.status(404).json({success:false,message:`No groundcamp with the id of ${req.params.campingId}`});
         }
 
         //add user Id to req.body
         req.body.user=req.user.id;
         //Check for existed appointment
         const existedAppointments=await Appointment.find({user:req.user.id});
+        for (let i = 0; i < existedAppointments.length; i++) {
+            if(req.body.apptDate.split('T')[0] == existedAppointments[i].apptDate.toISOString().split('T')[0]){
+                return res.status(400).json({success:false,message:`Cannot reserve in the same date`});
+            }
+
+          }
         ////If the user is not an admin, they can only create 3 appointment
         if(existedAppointments.length >= 3 && req.user.role !== 'admin'){
             return res.status(400).json({success:false,message:`The user with ID ${req.user.id} has already made 3 appointments`});

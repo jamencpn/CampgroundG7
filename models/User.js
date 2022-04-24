@@ -17,6 +17,14 @@ const UserSchema=new mongoose.Schema({
             'Please add a valid email'
             ]
     },
+    contact:{
+        type: String,
+        required: [true,'Please add a telephone number'],
+        unique: true,
+        minlength: 10,
+        maxlength: 10,
+        match: [/^[0-9]{10}$/,'Telephone number should contain only digit']
+    },
     role: {
         type: String,
         enum: ['user','admin'],

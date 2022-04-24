@@ -9,7 +9,7 @@ const router = express.Router();
 const {protect,authorize} = require('../middleware/auth');
 
 //Re-route into other resource routers
-router.use('/:hospitalId/appointments/',appointmentRouter);
+router.use('/:campingId/appointments/',appointmentRouter);
 
 
 router.route('/').get(getHospitals).post(protect, authorize('admin'), createHospital);

@@ -73,7 +73,7 @@ const CampgroundSchema = new mongoose.Schema({
 
 CampgroundSchema.pre('remove',async function(next){
     console.log(`Appointments being removed from campground ${this._id}`);
-    await this.model('Appointment').deleteMany({camground: this._id});
+    await this.model('Appointment').deleteMany({camping: this._id});
     next();
 });
 
