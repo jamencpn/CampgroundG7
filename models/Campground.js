@@ -32,7 +32,7 @@ const CampgroundSchema = new mongoose.Schema({
     toObject:{virtuals:true}
 });
 
-// const HospitalSchema = new mongoose.Schema({
+// const CampgroundSchema = new mongoose.Schema({
 //     name: {
 //         type: String,
 //         required: [true, 'Please add a name'],
@@ -73,7 +73,7 @@ const CampgroundSchema = new mongoose.Schema({
 
 CampgroundSchema.pre('remove',async function(next){
     console.log(`Appointments being removed from campground ${this._id}`);
-    await this.model('Appointment').deleteMany({camping: this._id});
+    await this.model('Appointment').deleteMany({campground: this._id});
     next();
 });
 
@@ -81,7 +81,7 @@ CampgroundSchema.pre('remove',async function(next){
 CampgroundSchema.virtual('appointments',{
     ref: 'Appointment',
     localField: '_id',
-    foreignField:'camping',
+    foreignField:'campground',
     justOne:false
 });
 

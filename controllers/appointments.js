@@ -1,6 +1,6 @@
 const Appointment = require('../models/Appointment');
 
-const Groundcamp = require('../models/Hospital');
+const Campground = require('../models/Campground');
 
 //@desc     Get all appointments
 //@route    GET /api/v1/appointments
@@ -10,18 +10,18 @@ exports.getAppointments=async (req,res,next)=>{
     //General users can see only their appointments!
     if(req.user.role !== 'admin'){
         query=Appointment.find({user:req.user.id}).populate({
-            path:'camping',
+            path:'campground',
             select: 'name province contact'
         });
     }else{//If you are an admin, you can see all!
-        if(req.params.campingId){
-            query=Appointment.find({camping:req.params.campingId}).populate({
-                path:'camping',
+        if(req.params.campgroundId){
+            query=Appointment.find({campground:req.params.campgroundId}).populate({
+                path:'campground',
                 select: 'name province contact'
             });
         } else{
         query=Appointment.find().populate({
-            path:'camping',
+            path:'campground',
             select: 'name province contact'
         });
     }
@@ -46,7 +46,7 @@ exports.getAppointments=async (req,res,next)=>{
 exports.getAppointment=async (req,res,next)=>{
     try {
         const appointment = await Appointment.findById(req.params.id).populate({
-            path: 'camping',
+            path: 'campground',
             select: 'name description contact'
         });
 
@@ -65,17 +65,17 @@ exports.getAppointment=async (req,res,next)=>{
 };
 
 //@desc     Add appointment
-//@route    POST /api/v1/groundcamps/:campingId/appointment
+//@route    POST /api/v1/campgrounds/:campgroundId/appointment
 //@access   Private
 exports.addAppointment=async (req,res,next)=>{
     try {
-        console.log(req.params.campingId)
-        req.body.camping = req.params.campingId;
+        console.log(req.params.campgroundId)
+        req.body.campground = req.params.campgroundId;
 
-        const groundcamp = await Groundcamp.findById(req.params.campingId);
+        const campground = await Campground.findById(req.params.campgroundId);
 
-        if(!groundcamp){
-            return res.status(404).json({success:false,message:`No groundcamp with the id of ${req.params.campingId}`});
+        if(!campground){
+            return res.status(404).json({success:false,message:`No campground with the id of ${req.params.campgroundId}`});
         }
 
         //add user Id to req.body

@@ -10,7 +10,7 @@ const AppointmentSchema=new mongoose.Schema({
         ref: 'User',
         required:true
     },
-    camping:{
+    campground:{
         type:mongoose.Schema.ObjectId,
         ref: 'Camping',
         required:true

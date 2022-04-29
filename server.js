@@ -19,7 +19,7 @@ const limiter=rateLimit({
 });
 
 // Route files
-const hospitals = require('./routes/hospitals');
+const campgrounds = require('./routes/campgrounds');
 const auth = require('./routes/auth');
 const appointments = require('./routes/appointments');
 
@@ -60,7 +60,7 @@ app.use(limiter); // limit requests max/time
 app.use(hpp()); // param pollution
 app.use(mongoSanitize());  // Injection (input query {"$gt":""})
 app.use(xss()); // remove </script> input
-app.use('/api/v1/hospitals',hospitals);
+app.use('/api/v1/campgrounds',campgrounds);
 app.use('/api/v1/auth',auth);
 app.use('/api/v1/appointments',appointments);
 app.use(cookieParser());

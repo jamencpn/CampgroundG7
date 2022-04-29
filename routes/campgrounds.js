@@ -1,5 +1,5 @@
 const express = require('express');
-const {getHospitals, getHospital, createHospital, updateHospital, deleteHospital} = require('../controllers/hospitals');
+const {getCampgrounds, getCampground, createCampground, updateCampground, deleteCampground} = require('../controllers/campgrounds');
 
 //Include other resouce routers
 const appointmentRouter=require('./appointments');
@@ -9,11 +9,11 @@ const router = express.Router();
 const {protect,authorize} = require('../middleware/auth');
 
 //Re-route into other resource routers
-router.use('/:campingId/appointments/',appointmentRouter);
+router.use('/:campgroundId/appointments/',appointmentRouter);
 
 
-router.route('/').get(getHospitals).post(protect, authorize('admin'), createHospital);
-router.route('/:id').get(getHospital).put(protect, authorize('admin'), updateHospital).delete(protect, authorize('admin'), deleteHospital);
+router.route('/').get(getCampgrounds).post(protect, authorize('admin'), createCampground);
+router.route('/:id').get(getCampground).put(protect, authorize('admin'), updateCampground).delete(protect, authorize('admin'), deleteCampground);
 
 module.exports=router;
 
@@ -21,7 +21,7 @@ module.exports=router;
 * @swagger
 * components:
 *   schemas:
-*     Hospital:
+*     Campground:
 *       type: object
 *       required:
 *         - name
@@ -30,14 +30,14 @@ module.exports=router;
 *         id:
 *           type: string
 *           format: uuid
-*           description: The auto-generated id of the hospital
+*           description: The auto-generated id of the campground
 *           example: d290f1ee-6c54-4b01-90e6-d701748f0851
 *         ลําดับ:
 *           type: string
 *           description: Ordinal number
 *         name:
 *           type: string
-*           description: Hospital name
+*           description: Campground name
 *         address:
 *           type: string
 *           description: House No., Street, Road
@@ -59,7 +59,7 @@ module.exports=router;
 *       example:
 *         id: 609bda561452242d88d36e37
 *         ลําดับ: 121
-*         name: Happy Hospital
+*         name: Happy Campground
 *         address: 121 ถ.สุขุมวิท
 *         district: บางนา
 *         province: กรุงเทพมหานคร
@@ -71,145 +71,145 @@ module.exports=router;
 /**
 * @swagger
 * tags:
-*   name: Hospitals
-*   description: The hospitals managing API
+*   name: Campgrounds
+*   description: The campgrounds managing API
 */
 
 /**
 * @swagger
-* /hospitals:
+* /campgrounds:
 *   get:
-*     summary: Returns the list of all the hospitals
-*     tags: [Hospitals]
+*     summary: Returns the list of all the campgrounds
+*     tags: [Campgrounds]
 *     responses:
 *       200:
-*         description: The list of the hospitals
+*         description: The list of the campgrounds
 *         content:
 *           application/json:
 *             schema:
 *               type: array
 *               items:
-*                 $ref: '#/components/schemas/Hospital'
+*                 $ref: '#/components/schemas/Campground'
 */
 
 /**
 * @swagger
-* /hospitals/{id}:
+* /campgrounds/{id}:
 *   get:
-*     summary: Get the hospital by id
-*     tags: [Hospitals]
+*     summary: Get the campground by id
+*     tags: [Campgrounds]
 *     parameters:
 *       - in: path
 *         name: id
 *         schema:
 *           type: string
 *         required: true
-*         description: The hospital id
+*         description: The campground id
 *     responses:
 *       200:
-*         description: The hospital description by id
+*         description: The campground description by id
 *         contents:
 *           application/json:
 *             schema:
-*               $ref: '#/components/schemas/Hospital'
+*               $ref: '#/components/schemas/Campground'
 *       404:
-*         description: The hospital was not found
+*         description: The campground was not found
 */
 
 /**
 * @swagger
-* /hospitals:
+* /campgrounds:
 *   post:
-*     summary: Create a new hospital
-*     tags: [Hospitals]
+*     summary: Create a new campground
+*     tags: [Campgrounds]
 *     requestBody:
 *       required: true
 *       content:
 *         application/json:
 *           schema:
-*             $ref: '#/components/schemas/Hospital'
+*             $ref: '#/components/schemas/Campground'
 *     responses:
 *       201:
-*         description: The hospital was successfully created
+*         description: The campground was successfully created
 *         content:
 *           application/json:
 *             schema:
-*               $ref: '#/components/schemas/Hospital'
+*               $ref: '#/components/schemas/Campground'
 *       500:
 *         description: Some server error
 */
 
 /**
 * @swagger
-* /hospitals/{id}:
+* /campgrounds/{id}:
 *   put:
-*     summary: Update the hospital by the id
-*     tags: [Hospitals]
+*     summary: Update the campground by the id
+*     tags: [Campgrounds]
 *     parameters:
 *       - in: path
 *         name: id
 *         schema:
 *           type: string
 *         required: true
-*         description: The hospital id
+*         description: The campground id
 *     requestBody:
 *       required: true
 *       content:
 *         application/json:
 *           schema:
-*             $ref: '#/components/schemas/Hospital'
+*             $ref: '#/components/schemas/Campground'
 *     responses:
 *       200:
-*         description: The hospital was updated
+*         description: The campground was updated
 *         content:
 *           application/json:
 *             schema:
-*               $ref: '#/components/schemas/Hospital'
+*               $ref: '#/components/schemas/Campground'
 *       404:
-*         description: The hospital was not found
+*         description: The campground was not found
 *       500:
 *         description: Some error happened
 */
 
 /**
 * @swagger
-* /hospitals/{id}:
+* /campgrounds/{id}:
 *   delete:
-*     summary: Remove the hospital by id
-*     tags: [Hospitals]
+*     summary: Remove the campground by id
+*     tags: [Campgrounds]
 *     parameters:
 *       - in: path
 *         name: id
 *         schema:
 *           type: string
 *         required: true
-*         description: The hospital id
+*         description: The campground id
 *
 *     responses:
 *       200:
-*         description: The hospital was deleted
+*         description: The campground was deleted
 *       404:
-*         description: The hospital was not found
+*         description: The campground was not found
 */
 
 // router.get('/', (req,res) => {
-//     res.status(200).json({success:true, msg:'Show all hospitals'});
+//     res.status(200).json({success:true, msg:'Show all campgrounds'});
 // });
 
 // router.get('/:id', (req,res) => {
-//     res.status(200).json({success:true, msg:`Show hospital ${req.params.id}`});
+//     res.status(200).json({success:true, msg:`Show campground ${req.params.id}`});
 // });
 
 // router.post('/', (req,res) => {
-//     res.status(200).json({success:true, msg:'Create new hospitals'});
+//     res.status(200).json({success:true, msg:'Create new campgrounds'});
 // });
 
 // router.put('/:id', (req,res) => {
-//     res.status(200).json({success:true, msg:`Update hospital ${req.params.id}`});
+//     res.status(200).json({success:true, msg:`Update campground ${req.params.id}`});
 // });
 
 // router.delete('/:id', (req,res) => {
-//     res.status(200).json({success:true, msg:`Delete hospital ${req.params.id}`});
+//     res.status(200).json({success:true, msg:`Delete campground ${req.params.id}`});
 // });
 
 // module.exports=router;
