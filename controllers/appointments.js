@@ -11,18 +11,18 @@ exports.getAppointments=async (req,res,next)=>{
     if(req.user.role !== 'admin'){
         query=Appointment.find({user:req.user.id}).populate({
             path:'campground',
-            select: 'name province contact'
+            select: 'name address contact'
         });
     }else{//If you are an admin, you can see all!
         if(req.params.campgroundId){
             query=Appointment.find({campground:req.params.campgroundId}).populate({
                 path:'campground',
-                select: 'name province contact'
+                select: 'name address contact'
             });
         } else{
         query=Appointment.find().populate({
             path:'campground',
-            select: 'name province contact'
+            select: 'name address contact'
         });
     }
     }
