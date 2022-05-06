@@ -21,7 +21,7 @@ exports.getCampgrounds=async (req,res,next)=>{
         //Create query string
         let queryStr=JSON.stringify(reqQuery);
         queryStr=queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g,match=>`$${match}`);
-    
+        
         query=Campground.find(JSON.parse(queryStr)).populate('appointments');
         
         //Select Fields
